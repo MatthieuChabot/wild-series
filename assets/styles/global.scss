@@ -1,0 +1,25 @@
+$blue: #2657a4;
+$red: #dc1d22;
+$white: white;
+
+@import "~bootstrap/scss/bootstrap";
+
+nav {
+  background-color: $danger;
+}
+
+a {
+  color: $white;
+}
+
+.nav-link {
+  color: $white;
+}
+
+a:hover {
+  color: $white;
+}
+h1 {
+  text-align: center;
+  padding: 20px;
+}
