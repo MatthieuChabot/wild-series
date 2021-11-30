@@ -1,6 +1,7 @@
 $blue: #2657a4;
 $red: #dc1d22;
 $white: white;
+$black: black;
 
 @import "~bootstrap/scss/bootstrap";
 
@@ -9,7 +10,7 @@ nav {
 }
 
 a {
-  color: $white;
+  color: $black;
 }
 
 .nav-link {
@@ -17,9 +18,13 @@ a {
 }
 
 a:hover {
-  color: $white;
+  color: $black;
 }
 h1 {
   text-align: center;
   padding: 20px;
+}
+
+li a {
+  color: $black;
 }
