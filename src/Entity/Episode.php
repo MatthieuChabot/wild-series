@@ -86,7 +86,7 @@ class Episode
 
     public function setSynopsis(string $synopsis): self
     {
-        $this->synospis = $synopsis;
+        $this->synopsis = $synopsis;
 
         return $this;
     }
