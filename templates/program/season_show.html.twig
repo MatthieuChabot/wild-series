@@ -13,7 +13,7 @@
 
             <li>
                 <div>
-                    <strong>Episode n°{{ episode.number }}</strong>
+                    <a href="{{ path('program_episode_show', {program : program.id, season : season.id, episode : episode.id})}}"><strong>Episode n°{{ episode.number }}</strong></a>
                     <p>{{ episode.title }}</p>
                 </div>
             </li>
