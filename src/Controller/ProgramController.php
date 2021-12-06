@@ -58,7 +58,7 @@ class ProgramController extends AbstractController
     /**
      * Getting a program by id
      *
-     * @Route("/{id}", name="show")
+     * @Route("/{program}", name="show")
      * @return Response
      */
     public function show(Program $program): Response

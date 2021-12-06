@@ -90,4 +90,9 @@ class Season
 
         return $this;
     }
+
+    public function getFullName(): string
+    {
+        return $this->program->getTitle() . ' - ' . $this->description;
+    }
 }

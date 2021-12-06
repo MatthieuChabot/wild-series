@@ -7,7 +7,7 @@
 
     {{ include('season/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
 
-    <a href="{{ path('season_index') }}">Retour à la liste des saisons</a>
+    <a href="{{ path('program_show', {program : program.id, season : season.id}) }}">Retour à la liste des saisons</a>
 
     {{ include('season/_delete_form.html.twig') }}
 {% endblock %}
