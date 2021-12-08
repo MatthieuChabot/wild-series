@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<h2>Reviews la série</h2>
+<div>
+    <ul>
+        {% for review in reviews %}
+        <li>
+            <div>
+            {{review.program.id}}
+            <h2>{{review.author}}</h2>
+            <p>{{review.reviewText}}</p>
+            <i>Date :</i>
+            <p>Note : {{review.note}}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

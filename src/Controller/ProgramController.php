@@ -6,7 +6,8 @@ use App\Entity\Program;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Form\ProgramType;
-
+use App\Service\Slugify;
+use App\Repository\ReviewRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +25,15 @@ class ProgramController extends AbstractController
      *
      * @Route("/new", name="new")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Slugify $slugify): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $slug = $slugify->generate($program->getTitle());
+            $program->setSlug($slug);
             $entityManager->persist($program);
             $entityManager->flush();
             return $this->redirectToRoute('program_index');
@@ -56,18 +59,18 @@ class ProgramController extends AbstractController
     }
 
     /**
-     * Getting a program by id
+     * Getting a program by slug
      *
-     * @Route("/{program}", name="show")
+     * @Route("/{slug}", name="show")
      * @return Response
      */
-    public function show(Program $program): Response
+    public function show(Program $program, ReviewRepository $reviewRepository): Response
     {
 
         $seasons = $this->getDoctrine()
             ->getRepository(Season::class)
             ->findBy(
-                ['program' => $program->getId()],
+                ['program' => $program->getSlug()],
                 ['program' => 'DESC'],
             );
 
@@ -77,14 +80,14 @@ class ProgramController extends AbstractController
             );
         }
         return $this->render('program/show.html.twig', [
-            'program' => $program, 'seasons' => $seasons
+            'program' => $program, 'seasons' => $seasons, 'reviews' => $reviewRepository->findBy(['program' => $program->getId()])
         ]);
     }
 
     /**
      * Getting a season
      *
-     * @Route("/{program}/season/{season}", name="season_show")
+     * @Route("/{slug}/season/{season}", name="season_show")
      * @return Response
      */
 
@@ -103,7 +106,7 @@ class ProgramController extends AbstractController
     /**
      * Getting an episode
      *
-     * @Route("/{program}/season/{season}/episode/{episode}", name="episode_show")
+     * @Route("/{program_slug}/season/{season}/episode/{episode_slug}", name="episode_show")
      * @return Response
      */
 

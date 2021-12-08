@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
+use App\Service\Slugify;
 use App\Form\EpisodeType;
 use App\Repository\EpisodeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,13 +26,15 @@ class EpisodeController extends AbstractController
     }
 
     #[Route('/episode/new', name: 'episode_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Slugify $slugify): Response
     {
         $episode = new Episode();
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugify->generate($episode->getTitle());
+            $episode->setSlug($slug);
             $entityManager->persist($episode);
             $entityManager->flush();
 
@@ -44,7 +47,7 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/episode/{id}', name: 'episode_show', methods: ['GET'])]
+    #[Route('/episode/{slug}', name: 'episode_show', methods: ['GET'])]
     public function show(Episode $episode): Response
     {
         return $this->render('episode/show.html.twig', [
@@ -72,10 +75,10 @@ class EpisodeController extends AbstractController
         ]);
     }
 
-    #[Route('/episode/{id}', name: 'episode_delete', methods: ['POST'])]
+    #[Route('/episode/{slug}', name: 'episode_delete', methods: ['POST'])]
     public function delete(Request $request, Episode $episode, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $episode->getSlug(), $request->request->get('_token'))) {
             $entityManager->remove($episode);
             $entityManager->flush();
         }

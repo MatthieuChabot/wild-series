@@ -26,10 +26,25 @@
         {% for season in seasons %}
 
             <li>
-                <a href="{{ path('program_season_show', {program : program.id, season : season.id})}}">Saison n°{{ season.number }}</a>
+                <a href="{{ path('program_season_show', {slug : program.slug, season : season.id})}}">Saison n°{{ season.number }}</a>
             </li>
 
         {% endfor %}
+        </ul>
+    </div>
+    <h2>Reviews la série</h2>
+    <div>
+        <ul>
+            {% for review in reviews %}
+            <li>
+                <div>
+                <h2>{{review.author}}</h2>
+                <p>{{review.reviewText}}</p>
+                <i>Date : {{review.date | date('d/m/Y')}}</i>
+                <p>Note : {{review.note}}/5</p>
+                </div>
+            </li>
+            {% endfor %}
         </ul>
     </div>
 
